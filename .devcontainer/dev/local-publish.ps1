@@ -1,0 +1,2 @@
+# cd /app/src/OpenVeer.Database/bin/release/netstandard2.0
+# ~/sqlpackage/sqlpackage /Action:Publish /SourceFile:OpenVeer.Database.dacpac /TargetServerName:openveer_db,1433 /TargetDatabaseName:OpenVeer /TargetUser:sa /TargetPassword:P@ssw0rd12345 /Properties:IncludeCompositeObjects=True

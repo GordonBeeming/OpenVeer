@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+    openveer_app:
+        build:
+            context: .
+        working_dir: /app
+        volumes:
+            - "../../:/app"
+        depends_on:
+            - openveer_db
+        command: >
+            bash -c "pwsh /app/.devcontainer/dev/init.ps1 && sleep infinity"
+
+    openveer_db:
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        environment:
+            - ACCEPT_EULA=Y
+            - SA_PASSWORD=P@ssw0rd12345
+        ports:
+            - 7601:1433
