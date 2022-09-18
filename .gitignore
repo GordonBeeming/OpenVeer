@@ -238,3 +238,6 @@ package-lock.json
 **/.vscode/**
 package/
 *.vsix
+
+
+openveer_db/

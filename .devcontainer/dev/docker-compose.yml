@@ -13,9 +13,11 @@ services:
             bash -c "pwsh /app/.devcontainer/dev/init.ps1 && sleep infinity"
 
     openveer_db:
-        image: mcr.microsoft.com/mssql/server:2019-latest
+        image: mcr.microsoft.com/mssql/server:2022-latest
         environment:
             - ACCEPT_EULA=Y
-            - SA_PASSWORD=P@ssw0rd12345
+            - MSSQL_SA_PASSWORD=P@ssw0rd12345
         ports:
             - 7601:1433
+        volumes:
+            - "../../openveer_db/:/db"
