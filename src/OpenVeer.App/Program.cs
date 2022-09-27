@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Diagnostics.Metrics;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OpenVeer.App.Data;
+using OpenVeer.Database;
 
 namespace OpenVeer.App
 {
@@ -10,12 +12,12 @@ namespace OpenVeer.App
     {
       var builder = WebApplication.CreateBuilder(args);
 
-      builder.Configuration.AddJsonFile($"appsettings.{Environment.MachineName}.json", optional: true, reloadOnChange: true);
+      builder.Configuration.AddJsonFile($"appsettings.overrides.json", optional: true, reloadOnChange: true);
 
       // Add services to the container.
       var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-      builder.Services.AddDbContext<ApplicationDbContext>(options =>
-          options.UseSqlServer(connectionString));
+      builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+      builder.Services.AddDbContext<OpenVeerDatabaseContext>(options => options.UseSqlServer(connectionString, o => o.MigrationsAssembly("OpenVeer.Database")));
       builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
       builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -47,6 +49,16 @@ namespace OpenVeer.App
           name: "default",
           pattern: "{controller=Home}/{action=Index}/{id?}");
       app.MapRazorPages();
+
+      using (var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+      {
+        var applicationDbContext = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+        applicationDbContext!.Database.Migrate();
+
+        var openVeerDatabaseContext = serviceScope.ServiceProvider.GetService<OpenVeerDatabaseContext>();
+        openVeerDatabaseContext!.Database.Migrate();
+      }
+
 
       app.Run();
     }
