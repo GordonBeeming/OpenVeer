@@ -12,6 +12,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenVeer.App", "OpenVeer.Ap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenVeer.Database", "OpenVeer.Database\OpenVeer.Database.csproj", "{0844A4F5-7AFB-41E0-9A2C-7367CF8FB924}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenVeer.RedirectEdge", "OpenVeer.RedirectEdge\OpenVeer.RedirectEdge.csproj", "{7C571F1E-9E5D-4D02-9CD7-2CCDD51EC3A4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{89B40BD0-D99C-41F4-A081-A51F48CF38EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,9 +30,17 @@ Global
 		{0844A4F5-7AFB-41E0-9A2C-7367CF8FB924}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0844A4F5-7AFB-41E0-9A2C-7367CF8FB924}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0844A4F5-7AFB-41E0-9A2C-7367CF8FB924}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C571F1E-9E5D-4D02-9CD7-2CCDD51EC3A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C571F1E-9E5D-4D02-9CD7-2CCDD51EC3A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C571F1E-9E5D-4D02-9CD7-2CCDD51EC3A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C571F1E-9E5D-4D02-9CD7-2CCDD51EC3A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{15DB57AA-07D9-4DB2-9FEB-CA3C99F86337} = {89B40BD0-D99C-41F4-A081-A51F48CF38EE}
+		{7C571F1E-9E5D-4D02-9CD7-2CCDD51EC3A4} = {89B40BD0-D99C-41F4-A081-A51F48CF38EE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A0FEB307-1F13-4DF7-96AE-531260575BE9}

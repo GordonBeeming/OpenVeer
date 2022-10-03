@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OpenVeer.App.Data;
 using OpenVeer.Database;
+using Serilog;
 
 namespace OpenVeer.App
 {
@@ -12,7 +13,7 @@ namespace OpenVeer.App
     {
       var builder = WebApplication.CreateBuilder(args);
 
-      builder.Configuration.AddJsonFile($"appsettings.overrides.json", optional: true, reloadOnChange: true);
+      builder.Configuration.AddJsonFile($"appsettings.overrides.json", optional: true, reloadOnChange: false);
 
       // Add services to the container.
       var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -23,6 +24,16 @@ namespace OpenVeer.App
       builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
           .AddEntityFrameworkStores<ApplicationDbContext>();
       builder.Services.AddControllersWithViews();
+
+      builder.Services.AddApplicationInsightsTelemetry();
+
+      var logger = new LoggerConfiguration()
+          .ReadFrom.Configuration(builder.Configuration)
+          .Enrich.FromLogContext()
+          .CreateLogger();
+
+      builder.Logging.ClearProviders();
+      builder.Logging.AddSerilog(logger);
 
       var app = builder.Build();
 

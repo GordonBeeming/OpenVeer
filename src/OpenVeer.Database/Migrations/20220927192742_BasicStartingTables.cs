@@ -30,7 +30,7 @@ namespace OpenVeer.Database.Migrations
                 name: "ShortLinks",
                 columns: table => new
                 {
-                    Token = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false, collation: "SQL_Latin1_General_CP1_CS_AS"),
                     DomainId = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),

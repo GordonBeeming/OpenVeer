@@ -241,4 +241,4 @@ package/
 
 
 openveer_db/
-/src/OpenVeer.App/appsettings.overrides.json
+appsettings.overrides.json
