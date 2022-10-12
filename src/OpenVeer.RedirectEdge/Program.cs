@@ -14,18 +14,20 @@ namespace OpenVeer.RedirectEdge
 
       builder.Configuration.AddJsonFile($"appsettings.overrides.json", optional: true, reloadOnChange: false);
 
-      var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-      builder.Services.AddDbContext<OpenVeerDatabaseContext>(options => options.UseSqlServer(connectionString, o => o.MigrationsAssembly("OpenVeer.Database")));
+      var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
+                             throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+      builder.Services.AddDbContext<OpenVeerDatabaseContext>(options =>
+        options.UseSqlServer(connectionString, o => o.MigrationsAssembly("OpenVeer.Database")));
 
       builder.Services.AddApplicationInsightsTelemetry();
 
-      var logger = new LoggerConfiguration()
-          .ReadFrom.Configuration(builder.Configuration)
-          .Enrich.FromLogContext()
-          .CreateLogger();
+      var globalLogger = new LoggerConfiguration()
+        .ReadFrom.Configuration(builder.Configuration)
+        .Enrich.FromLogContext()
+        .CreateLogger();
 
       builder.Logging.ClearProviders();
-      builder.Logging.AddSerilog(logger);
+      builder.Logging.AddSerilog(globalLogger);
 
       var app = builder.Build();
 
@@ -33,13 +35,14 @@ namespace OpenVeer.RedirectEdge
       {
         var domain = context.Request.Host.HasValue ? context.Request.Host.Value : null;
         var path = context.Request.Path.HasValue ? context.Request.Path.Value.Remove(0, 1) : null;
-        if (path == null || path.Length == 0 || domain == null || domain.Length == 0)
+        if (string.IsNullOrEmpty(path) || domain == null || domain.Length == 0)
         {
 #if !DEBUG
           await Results.Redirect("https://devstarops.com", false).ExecuteAsync(context);
 #endif
           return;
         }
+
         var logger = context.RequestServices.GetService<ILogger<Program>>();
         if (logger == null)
         {
@@ -75,17 +78,18 @@ namespace OpenVeer.RedirectEdge
         }
 
         var link = await dbContext.ShortLinks
-            .FirstOrDefaultAsync(o => o.Token == path &&
-            (domain == null || o.Domain.DomainName == domain));
+          .FirstOrDefaultAsync(o => o.Token == path &&
+                                    // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+                                    (domain == null || o.Domain.DomainName == domain));
 
         if (link == null)
         {
-          logger.LogInformation($"404: token {path}");
+          logger.LogInformation("404: token {Path}", path);
           await Results.NotFound().ExecuteAsync(context);
           return;
         }
 
-        logger.LogDebug($"Redirect token {path} to {link.LongUrl}");
+        logger.LogDebug("Redirect token {Path} to {LinkLongUrl}", path, link.LongUrl);
         await Results.Redirect(link.LongUrl, false).ExecuteAsync(context);
       });
 
@@ -100,12 +104,14 @@ namespace OpenVeer.RedirectEdge
 
     private static bool IgnorePath(string pathToIgnore, string path, ILogger logger)
     {
-     if ( path.Equals(pathToIgnore, StringComparison.InvariantCultureIgnoreCase))
+      if (!path.Equals(pathToIgnore, StringComparison.InvariantCultureIgnoreCase))
       {
-        logger.LogInformation($"Ignore path {pathToIgnore} requested.");
-        return true;
+        return false;
       }
-      return false;
+
+      logger.LogInformation("Ignore path {PathToIgnore} requested", pathToIgnore);
+      return true;
+
     }
   }
 }

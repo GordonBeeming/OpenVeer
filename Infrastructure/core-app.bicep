@@ -41,7 +41,7 @@ var sqlserverName = 'openveer-${environment}'
 var databaseName = 'openveer'
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' = {
-  name: 'openveer-vnet'
+  name: 'openveer-${environment}-vnet'
   location: location
   properties: {
     addressSpace: {
