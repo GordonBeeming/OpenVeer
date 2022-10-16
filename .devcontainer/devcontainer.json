@@ -25,7 +25,7 @@
     "mssql.connections": [
       {
         "authenticationType": "SqlLogin",
-        "server": "db_instance,1433",
+        "server": "openveer_db,1433",
         "database": "OpenVeer",
         "user": "sa",
         "password": "P@ssw0rd12345",
@@ -34,7 +34,7 @@
       },
       {
         "authenticationType": "SqlLogin",
-        "server": "db_instance,1433",
+        "server": "openveer_db,1433",
         "database": "",
         "user": "sa",
         "password": "P@ssw0rd12345",
