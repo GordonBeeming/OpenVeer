@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{0A683B75-6A59-40FD-A8C0-4A10E0DFE3CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenVeer.Api", "src\OpenVeer.Api\OpenVeer.Api.csproj", "{0FD98F52-8175-48F6-A25B-C1462752B8BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenVeer.Api.Tests.Integration", "tests\OpenVeer.Api.Tests.Integration\OpenVeer.Api.Tests.Integration.csproj", "{FBC1B0E9-0A43-4E63-85F3-0C56AAA2E471}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_sln", "_sln", "{6E38BFA8-3C89-4D55-BF29-9B5070E92DD4}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Packages.props = Directory.Packages.props
+		Directory.Build.props = Directory.Build.props
+		README.md = README.md
+		global.json = global.json
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0FD98F52-8175-48F6-A25B-C1462752B8BE} = {0A683B75-6A59-40FD-A8C0-4A10E0DFE3CE}
+		{FBC1B0E9-0A43-4E63-85F3-0C56AAA2E471} = {0A683B75-6A59-40FD-A8C0-4A10E0DFE3CE}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0FD98F52-8175-48F6-A25B-C1462752B8BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FD98F52-8175-48F6-A25B-C1462752B8BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FD98F52-8175-48F6-A25B-C1462752B8BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FD98F52-8175-48F6-A25B-C1462752B8BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBC1B0E9-0A43-4E63-85F3-0C56AAA2E471}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBC1B0E9-0A43-4E63-85F3-0C56AAA2E471}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBC1B0E9-0A43-4E63-85F3-0C56AAA2E471}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBC1B0E9-0A43-4E63-85F3-0C56AAA2E471}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
