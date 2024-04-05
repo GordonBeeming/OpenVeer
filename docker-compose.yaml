@@ -1,0 +1,34 @@
+version: "3.9"
+name: openveer
+
+services:
+  sql:
+    container_name: openveer-sql
+    hostname: openveer-sql
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    environment:
+      - SA_PASSWORD=${SA_PASSWORD}
+      - ACCEPT_EULA=Y
+      - MSSQL_DATA_DIR=/var/opt/mssql/data
+      - MSSQL_LOG_DIR=/var/opt/mssql/log
+      - MSSQL_BACKUP_DIR=/var/opt/mssql/backup
+    ports:
+      - 1800:1433
+    volumes:
+      - openveer-sql:/var/opt/mssql
+  azurite:
+    container_name: openveer-azurite
+    hostname: openveer-azurite
+    image: mcr.microsoft.com/azure-storage/azurite:latest
+    ports:
+      - 11000:10000 
+      - 11001:10001 
+      - 11002:10002
+    volumes:
+      - openveer-azurite:/data
+
+volumes:
+  openveer-sql:
+    driver: local
+  openveer-azurite:
+    driver: local

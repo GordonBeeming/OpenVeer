@@ -1,0 +1,10 @@
+﻿global using System.Net;
+global using System.Net.Http.Json;
+global using Microsoft.Extensions.DependencyInjection;
+global using Xunit;
+global using OpenVeer.Api.Tests.Integration.Extensions;
+global using OpenVeer.Api.Tests.Integration.Servers;
+global using OpenVeer.Data;
+global using Microsoft.EntityFrameworkCore;
+global using FluentAssertions;
+global using static OpenVeer.Api.Tests.Integration.GlobalConstants;

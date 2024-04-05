@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+
+        <RootNamespace>OpenVeer.Api.Tests.Integration</RootNamespace>
+        <AssemblyName>OpenVeer.Api.Tests.Integration</AssemblyName>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="coverlet.collector" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <PackageReference Include="xunit" />
+        <PackageReference Include="xunit.runner.visualstudio" />
+        <PackageReference Include="WireMock.Net" />
+        <PackageReference Include="Testcontainers" />
+        <PackageReference Include="FluentAssertions" />
+        <PackageReference Include="WebMotions.Fake.Authentication.JwtBearer" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" />
+        <PackageReference Include="Bogus" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="Xunit" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Api\Api.csproj" />
+        <ProjectReference Include="..\..\src\Data\Data.csproj" />
+        <ProjectReference Include="..\..\src\Api\Api.csproj" />
+    </ItemGroup>
+
+</Project>
