@@ -47,7 +47,7 @@ app.MapGet("/{shortLinkPath}",
           Referer = context.Request.Headers.Referer.ToString(),
           UserAgent = context.Request.Headers.UserAgent.ToString(),
         });
-        await db.SaveChangesAsync();
+        await db.SaveChangesAsync(ct);
         context.Response.Redirect(shortLink.OriginalUrl, permanent: false);
         return;
       }
