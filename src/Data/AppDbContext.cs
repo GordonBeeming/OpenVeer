@@ -8,6 +8,8 @@ public sealed class AppDbContext : DbContext
   }
 
   public DbSet<ShortLink> ShortLinks { get; set; }
+  public DbSet<ShortLinkUsage> ShortLinkUsages { get; set; }
+  public DbSet<LinkDomain> LinkDomains { get; set; }
 
   protected override void OnModelCreating(ModelBuilder builder)
   {

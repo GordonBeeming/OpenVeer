@@ -16,18 +16,18 @@ WORKDIR /src
 COPY ["global.json", "global.json"]
 COPY ["Directory.Build.props", "Directory.Build.props"]
 COPY ["Directory.Packages.props", "Directory.Packages.props"]
-COPY ["src/Api/Api.csproj", "src/Api/"]
+COPY ["src/Redirect/Redirect.csproj", "src/Redirect/"]
 COPY ["src/Data/Data.csproj", "src/Data/"]
-RUN dotnet restore "src/Api/Api.csproj"
+RUN dotnet restore "src/Redirect/Redirect.csproj"
 COPY . .
-WORKDIR "/src/src/Api"
-RUN dotnet build "Api.csproj" -c $BUILD_CONFIGURATION --no-restore
+WORKDIR "/src/src/Redirect"
+RUN dotnet build "Redirect.csproj" -c $BUILD_CONFIGURATION --no-restore
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false --no-restore --no-build
+RUN dotnet publish "Redirect.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false --no-restore --no-build
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "OpenVeer.Api.dll"]
+ENTRYPOINT ["dotnet", "OpenVeer.Redirect.dll"]

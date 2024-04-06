@@ -32,7 +32,8 @@ public sealed class ShortLinkConfiguration
       .IsRequired();
 
     builder.Property(o => o.ShortUrl)
-      .IsRequired();
+      .IsRequired()
+      .UseCollation("SQL_Latin1_General_CP1_CS_AS");
 
     builder.Property(o => o.CreatedAt)
       .HasDefaultValueSql("SYSUTCDATETIME()")
