@@ -44,8 +44,8 @@ app.MapGet("/{shortLinkPath}",
         {
           ShortLinkId = shortLink.Id,
           IPAddress = context.Connection.RemoteIpAddress?.ToString() ?? "Unknown",
-          Referer = context.Request.Headers["Referer"].ToString(),
-          UserAgent = context.Request.Headers["User-Agent"].ToString(),
+          Referer = context.Request.Headers.Referer.ToString(),
+          UserAgent = context.Request.Headers.UserAgent.ToString(),
         });
         await db.SaveChangesAsync();
         context.Response.Redirect(shortLink.OriginalUrl, permanent: false);
