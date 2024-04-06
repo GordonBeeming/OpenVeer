@@ -22,15 +22,133 @@ namespace OpenVeer.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("OpenVeer.Data.Domain.ShortLink", b =>
+            modelBuilder.Entity("OpenVeer.Data.Domain.LinkDomain", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("DomainName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RedirectToOn404")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TxtRecordName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TxtRecordValue")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Verified")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
+                    b.ToTable("LinkDomain");
+                });
+
+            modelBuilder.Entity("OpenVeer.Data.Domain.ShortLink", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("DomainId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("OriginalUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShortUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DomainId");
+
                     b.ToTable("ShortLinks");
+                });
+
+            modelBuilder.Entity("OpenVeer.Data.Domain.ShortLinkUsage", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("IPAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Referer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShortLinkId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserAgent")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShortLinkId");
+
+                    b.ToTable("ShortLinkUsage");
+                });
+
+            modelBuilder.Entity("OpenVeer.Data.Domain.ShortLink", b =>
+                {
+                    b.HasOne("OpenVeer.Data.Domain.LinkDomain", "Domain")
+                        .WithMany("ShortLinks")
+                        .HasForeignKey("DomainId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Domain");
+                });
+
+            modelBuilder.Entity("OpenVeer.Data.Domain.ShortLinkUsage", b =>
+                {
+                    b.HasOne("OpenVeer.Data.Domain.ShortLink", "ShortLink")
+                        .WithMany("ShortLinkUsages")
+                        .HasForeignKey("ShortLinkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ShortLink");
+                });
+
+            modelBuilder.Entity("OpenVeer.Data.Domain.LinkDomain", b =>
+                {
+                    b.Navigation("ShortLinks");
+                });
+
+            modelBuilder.Entity("OpenVeer.Data.Domain.ShortLink", b =>
+                {
+                    b.Navigation("ShortLinkUsages");
                 });
 #pragma warning restore 612, 618
         }

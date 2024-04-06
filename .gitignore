@@ -240,3 +240,4 @@ package/
 *.vsix
 .DS_Store
 .idea
+AppDbContextEfBundle

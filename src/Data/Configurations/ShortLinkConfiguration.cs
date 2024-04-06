@@ -6,23 +6,38 @@ public sealed class ShortLinkConfiguration
   {
     builder.ToTable("tb_ShortLink");
 
-    builder.HasKey(e => new { e.Id })
+    builder.HasKey(o => new { o.Id })
       .HasName("PK_ShortLink");
-    builder.Property(t => t.Id)
-      .HasDefaultValueSql("NEWID()");
+    builder.Property(o => o.Id)
+      .HasMaxLength(10)
+      .IsFixedLength()
+      .IsRequired();
+    builder.HasIndex(o => o.Id)
+      .IsUnique();
 
-    // builder.Property(t => t.Name)
-    //   .HasMaxLength(50)
-    //   .IsRequired();
-    //
-    // builder.Property(t => t.Number)
-    //   .HasMaxLength(20)
-    //   .IsRequired();
-    //
-    // builder.Property(t => t.Email)
-    //   .HasMaxLength(100);
-    //
-    // builder.Property(t => t.AvatarUrl)
-    //   .HasMaxLength(1024);
+    builder.Property(o => o.DomainId)
+      .HasMaxLength(10)
+      .IsFixedLength()
+      .IsRequired();
+    builder.HasOne(sl => sl.Domain)
+      .WithMany(ld => ld.ShortLinks)
+      .HasForeignKey(sl => sl.DomainId)
+      .HasConstraintName("FK_ShortLink_LinkDomain");
+
+    builder.Property(t => t.Title)
+      .HasMaxLength(250)
+      .IsRequired();
+
+    builder.Property(o => o.OriginalUrl)
+      .IsRequired();
+
+    builder.Property(o => o.ShortUrl)
+      .IsRequired();
+
+    builder.Property(o => o.CreatedAt)
+      .HasDefaultValueSql("SYSUTCDATETIME()")
+      .HasColumnType("DATETIMEOFFSET(7)")
+      .IsRequired()
+      .ValueGeneratedOnAdd();
   }
 }
