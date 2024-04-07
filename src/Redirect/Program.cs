@@ -29,6 +29,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var app = builder.Build();
 
+app.MapPost("/deploy/version", (IConfiguration configuration) => configuration["COMMIT_HASH"])
+  .WithName("GetDeployVersion_POST");
+app.MapGet("/deploy/version", (IConfiguration configuration) => configuration["COMMIT_HASH"])
+  .WithName("GetDeployVersion_GET");
+app.MapPost("/deploy/branch", (IConfiguration configuration) => configuration["BRANCH_NAME"])
+  .WithName("GetDeployBranch_POST");
+app.MapGet("/deploy/branch", (IConfiguration configuration) => configuration["BRANCH_NAME"])
+  .WithName("GetDeployBranch_GET");
+
 app.MapGet("/{shortLinkPath}",
     async (HttpContext context, string shortLinkPath, AppDbContext db, CancellationToken ct) =>
     {
