@@ -55,9 +55,6 @@ param skuCapacity int = 5
 param sqlAdmin string = 'SqlAdmin'
 @secure()
 param sqlAdminPassword string
-param appUser string = 'AppUser'
-@secure()
-param appUserPassword string
 var sqlServerName = '${abbrs.sqlServersDatabases}${resourceToken}'
 var databaseName = resourceToken
 
@@ -142,8 +139,6 @@ module sqlserver 'core/database/sqlserver/sqlserver.bicep' = {
     logAnalyticsWorkspaceId: monitoring.outputs.logAnalyticsWorkspaceId
     sqlAdmin: sqlAdmin
     sqlAdminPassword: sqlAdminPassword
-    appUser: appUser
-    appUserPassword: appUserPassword
     databaseName: databaseName
     keyVaultName: keyVaultName
     skuName: skuName

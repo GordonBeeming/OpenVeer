@@ -17,6 +17,16 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 app.UseForwardedHeaders();
+
+app.MapPost("/deploy/version", (IConfiguration configuration) => configuration["COMMIT_HASH"])
+  .WithName("GetDeployVersion_POST");
+app.MapGet("/deploy/version", (IConfiguration configuration) => configuration["COMMIT_HASH"])
+  .WithName("GetDeployVersion_GET");
+app.MapPost("/deploy/branch", (IConfiguration configuration) => configuration["BRANCH_NAME"])
+  .WithName("GetDeployBranch_POST");
+app.MapGet("/deploy/branch", (IConfiguration configuration) => configuration["BRANCH_NAME"])
+  .WithName("GetDeployBranch_GET");
+
 app.UseFastEndpoints();
 
 // Configure the HTTP request pipeline.
