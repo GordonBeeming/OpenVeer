@@ -16,8 +16,7 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
   options.KnownNetworks.Clear();
   options.KnownProxies.Clear();
 });
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
-                       throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
   options.UseSqlServer(connectionString, sqlServerOptions => sqlServerOptions.CommandTimeout(10));
@@ -60,6 +59,7 @@ app.MapGet("/{shortLinkPath}",
         context.Response.Redirect(shortLink.OriginalUrl, permanent: false);
         return;
       }
+#if !DEBUG
       var domain = await db.LinkDomains
         .Where(x => x.DomainName == host)
         .Select(o => new { o.RedirectToOn404 })
@@ -69,9 +69,17 @@ app.MapGet("/{shortLinkPath}",
         context.Response.Redirect(domain.RedirectToOn404, permanent: false);
         return;
       }
+#endif
       //should never get here
       context.Response.StatusCode = StatusCodes.Status404NotFound;
     })
   .WithName("HandleRedirect");
+
+var serviceScopeFactory = app.Services.GetService<IServiceScopeFactory>();
+using (var scope = serviceScopeFactory!.CreateScope())
+{
+  var appDbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+  appDbContext.Database.Migrate();
+}
 
 app.Run();
