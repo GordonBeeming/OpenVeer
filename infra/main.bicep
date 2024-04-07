@@ -17,6 +17,7 @@ var keyVaultSubnetNumber = 3
 var storageSubnetNumber = 4
 
 var abbrs = loadJsonContent('./abbreviations.json')
+var roles = loadJsonContent('./roles.json')
 
 // tags that should be applied to all resources.
 var tags = {
@@ -153,6 +154,7 @@ module appRedirect 'core/host/appservice.bicep' = {
     location: location
     tags: tags
     abbrs: abbrs
+    roles: roles
     webAppVNetName: vNetName
     webAppSubnetId: network.outputs.webSitesAppServiceSubnetId
     applicationInsightsName: applicationInsightsName
@@ -164,8 +166,14 @@ module appRedirect 'core/host/appservice.bicep' = {
       ASPNETCORE_ENVIRONMENT: 'Production'
       ApplicationInsightsAgent_EXTENSION_VERSION: '~3'
       DOCKER_REGISTRY_SERVER_URL: 'https://ghcr.io'
-      ConnectionStrings__DefaultConnection: sqlserver.outputs.connectionString
     }
+    connectionStrings: [
+      {
+        name: 'DefaultConnection'
+        connectionString: sqlserver.outputs.connectionString
+        type: 'SQLAzure'
+      }
+    ]
   }
 }
 

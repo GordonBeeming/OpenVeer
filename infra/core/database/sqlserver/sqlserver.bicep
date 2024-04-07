@@ -55,6 +55,16 @@ resource sqlDatabase 'Microsoft.Sql/servers/databases@2023-05-01-preview' = {
   }
 }
 
+resource encryptionProtector 'Microsoft.Sql/servers/encryptionProtector@2023-05-01-preview' = {
+  parent: sqlServer
+  name: 'current'
+  properties: {
+    serverKeyName: 'ServiceManaged'
+    serverKeyType: 'ServiceManaged'
+    autoRotationEnabled: false
+  }
+}
+
 resource virtualNetworkRule 'Microsoft.Sql/servers/virtualNetworkRules@2023-05-01-preview' = {
   parent: sqlServer
   name: virtualNetworkConnectionName
@@ -63,6 +73,14 @@ resource virtualNetworkRule 'Microsoft.Sql/servers/virtualNetworkRules@2023-05-0
     ignoreMissingVnetServiceEndpoint: false
   }
 }
+
+// resource transparentDataEncryption 'Microsoft.Sql/servers/databases/transparentDataEncryption@2023-05-01-preview' = {
+//   parent: sqlDatabase
+//   name: 'current'
+//   properties: {
+//     state: 'Enabled'
+//   }
+// }
 
 // resource backupLongTermRetentionPolicy 'Microsoft.Sql/servers/databases/backupLongTermRetentionPolicies@2023-05-01-preview' = {
 //   parent: sqlDatabase

@@ -12,8 +12,6 @@ param networkAcls object = {
   virtualNetworkRules: [
     {
       id: keyvaultSubnetId
-      action: 'Allow'
-      state: 'Succeeded'
     }
   ]
 }
@@ -43,7 +41,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
     enableSoftDelete: true
     softDeleteRetentionInDays: 90
     enableRbacAuthorization: true
-    publicNetworkAccess: 'SecuredByPerimeter'
+    publicNetworkAccess: 'Enabled'
   }
 }
 

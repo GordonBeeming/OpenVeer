@@ -1,22 +1,27 @@
-metadata description = 'Assigns an Azure Key Vault access policy.'
-param name string = 'add'
-
-param keyVaultName string
-param permissions object = { secrets: [ 'get', 'list' ] }
+metadata description = 'Creates a role assignment for a service principal.'
 param principalId string
+param keyVaultName string
 
-resource keyVaultAccessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2022-07-01' = {
-  parent: keyVault
-  name: name
-  properties: {
-    accessPolicies: [ {
-        objectId: principalId
-        tenantId: subscription().tenantId
-        permissions: permissions
-      } ]
-  }
-}
+@allowed([
+  'Device'
+  'ForeignGroup'
+  'Group'
+  'ServicePrincipal'
+  'User'
+])
+param principalType string = 'ServicePrincipal'
+param roleDefinitionId string
 
 resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
   name: keyVaultName
+}
+
+resource role 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(subscription().id, resourceGroup().id, principalId, roleDefinitionId)
+  scope: keyVault
+  properties: {
+    principalId: principalId
+    principalType: principalType
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', roleDefinitionId)
+  }
 }

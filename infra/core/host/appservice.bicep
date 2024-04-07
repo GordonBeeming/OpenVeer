@@ -3,6 +3,7 @@ param name string
 param location string = resourceGroup().location
 param tags object = {}
 param abbrs object = {}
+param roles object = {}
 
 // Reference Properties
 param webAppVNetName string
@@ -17,6 +18,7 @@ param allowedOrigins array = []
 param appCommandLine string = ''
 @secure()
 param appSettings object = {}
+param connectionStrings array = []
 param functionAppScaleLimit int = 0
 param minimumElasticInstanceCount int = 0
 param linuxFxVersion string
@@ -32,6 +34,16 @@ var virtualNetworkConnectionName = '${abbrs.networkConnections}${name}'
 resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
   name: managedIdentityName
   location: location
+}
+
+module keyVaultAccess '../security/keyvault-access.bicep' = {
+  name: '${deployment().name}-keyVaultAccess'
+  params: {
+    principalId: managedIdentity.properties.principalId
+    keyVaultName: keyVaultName
+    roleDefinitionId: roles.keyVaultSecretsUser
+    principalType: 'ServicePrincipal'
+  }
 }
 
 resource appService 'Microsoft.Web/sites@2023-01-01' = {
@@ -61,6 +73,7 @@ resource appService 'Microsoft.Web/sites@2023-01-01' = {
     vnetImagePullEnabled: false
     vnetContentShareEnabled: false
     siteConfig: {
+      connectionStrings: connectionStrings
       numberOfWorkers: numberOfWorkers
       linuxFxVersion: linuxFxVersion
       acrUseManagedIdentityCreds: false
@@ -203,8 +216,7 @@ module configAppSettings 'appservice-appsettings.bicep' = {
     appSettings: union(
       appSettings,
       {
-        name: 'AZURE_CLIENT_ID'
-        value: managedIdentity.properties.clientId
+        AZURE_CLIENT_ID: managedIdentity.properties.clientId
       },
       !empty(applicationInsightsName)
         ? { APPLICATIONINSIGHTS_CONNECTION_STRING: applicationInsights.properties.ConnectionString }
