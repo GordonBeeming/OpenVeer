@@ -49,6 +49,18 @@ var storageName = '${abbrs.storageStorageAccounts}${resourceTokenNoDash}'
 // keyvault
 var keyVaultName = '${abbrs.keyVaultVaults}${resourceToken}'
 
+// sql server
+param skuName string = 'Basic'
+param skuCapacity int = 5
+param sqlAdmin string = 'SqlAdmin'
+@secure()
+param sqlAdminPassword string
+param appUser string = 'AppUser'
+@secure()
+param appUserPassword string
+var sqlServerName = '${abbrs.sqlServersDatabases}${resourceToken}'
+var databaseName = resourceToken
+
 // app service
 var appServicePlanName = '${abbrs.webSitesAppService}${resourceToken}'
 var appServicePlanSku = 'B3'
@@ -119,6 +131,26 @@ module appService 'core/host/appserviceplan.bicep' = {
   }
 }
 
+module sqlserver 'core/database/sqlserver/sqlserver.bicep' = {
+  name: '${deployment().name}-sqlserver'
+  params: {
+    name: sqlServerName
+    location: location
+    tags: tags
+    abbrs: abbrs
+    databaseSubnetId: network.outputs.databaseSubnetId
+    logAnalyticsWorkspaceId: monitoring.outputs.logAnalyticsWorkspaceId
+    sqlAdmin: sqlAdmin
+    sqlAdminPassword: sqlAdminPassword
+    appUser: appUser
+    appUserPassword: appUserPassword
+    databaseName: databaseName
+    keyVaultName: keyVaultName
+    skuName: skuName
+    skuCapacity: skuCapacity
+  }
+}
+
 module appRedirect 'core/host/appservice.bicep' = {
   name: '${deployment().name}-app-redirect'
   params: {
@@ -137,6 +169,7 @@ module appRedirect 'core/host/appservice.bicep' = {
       ASPNETCORE_ENVIRONMENT: 'Production'
       ApplicationInsightsAgent_EXTENSION_VERSION: '~3'
       DOCKER_REGISTRY_SERVER_URL: 'https://ghcr.io'
+      ConnectionStrings__DefaultConnection: sqlserver.outputs.connectionString
     }
   }
 }

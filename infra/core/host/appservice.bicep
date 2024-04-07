@@ -26,6 +26,7 @@ param healthCheckPath string = ''
 // identity
 var managedIdentityName = 'id-${name}'
 
+// networking
 var virtualNetworkConnectionName = '${abbrs.networkConnections}${name}'
 
 resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
