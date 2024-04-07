@@ -69,7 +69,7 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta-site.outputs.tags }}
+          tags: ${{ steps.meta-api.outputs.tags }}
           file: "src/Api/Dockerfile"
           build-args: |
             A_COMMIT_HASH=${{ steps.set-commit-hash.outputs.COMMIT_HASH }}
@@ -96,7 +96,7 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta-site.outputs.tags }}
+          tags: ${{ steps.meta-redirect.outputs.tags }}
           file: "src/Redirect/Dockerfile"
           build-args: |
             A_COMMIT_HASH=${{ steps.set-commit-hash.outputs.COMMIT_HASH }}
