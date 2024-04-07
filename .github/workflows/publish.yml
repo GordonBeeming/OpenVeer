@@ -12,8 +12,8 @@ env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
-  API_IMAGE_NAME: ${{ github.repository }}api
-  REDIRECT_IMAGE_NAME: ${{ github.repository }}redirect
+  API_IMAGE_NAME: ${{ github.repository }}Api
+  REDIRECT_IMAGE_NAME: ${{ github.repository }}Redirect
 
 jobs:
   build:
