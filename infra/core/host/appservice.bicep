@@ -196,7 +196,7 @@ resource virtualNetworkConnection 'Microsoft.Web/sites/virtualNetworkConnections
 // Updates to the single Microsoft.sites/web/config resources that need to be performed sequentially
 // sites/web/config 'appsettings'
 module configAppSettings 'appservice-appsettings.bicep' = {
-  name: '${name}-appSettings'
+  name: '${deployment().name}-${name}-appSettings'
   params: {
     name: appService.name
     appSettings: union(

@@ -53,7 +53,7 @@ var keyVaultName = '${abbrs.keyVaultVaults}${resourceToken}'
 var appServicePlanName = '${abbrs.webSitesAppService}${resourceToken}'
 var appServicePlanSku = 'B3'
 var appRedirectName = '${abbrs.webSitesAppService}redirect-${resourceToken}'
-var appRedirectLinuxFxVersion = 'DOCKER|githubsomwhere'
+var appRedirectLinuxFxVersion = 'DOCKER|ghcr.io/gordonbeeming/openveerredirect:main'
 
 // resources
 module network './app/network.bicep' = {
@@ -119,7 +119,7 @@ module appService 'core/host/appserviceplan.bicep' = {
   }
 }
 
-module appPRedirect 'core/host/appservice.bicep' = {
+module appRedirect 'core/host/appservice.bicep' = {
   name: '${deployment().name}-app-redirect'
   params: {
     name: appRedirectName
@@ -133,6 +133,11 @@ module appPRedirect 'core/host/appservice.bicep' = {
     keyVaultName: keyVaultName
     linuxFxVersion: appRedirectLinuxFxVersion
     logAnalyticsWorkspaceId: monitoring.outputs.logAnalyticsWorkspaceId
+    appSettings: {
+      ASPNETCORE_ENVIRONMENT: 'Production'
+      ApplicationInsightsAgent_EXTENSION_VERSION: '~3'
+      DOCKER_REGISTRY_SERVER_URL: 'https://ghcr.io'
+    }
   }
 }
 
